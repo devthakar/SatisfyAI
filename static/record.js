@@ -30,13 +30,22 @@ document.getElementById('recordButton').addEventListener('click', function() {
                             const properWavBlob = new Blob([wavBuffer], { type: 'audio/wav' });
                             const formData = new FormData();
                             formData.append("audioFile", properWavBlob, "recorded_audio.wav");
+
+                            // Get name and date from the form
+                            const name = document.querySelector('#name').value;
+                            const date = document.querySelector('#date').value;
+                            formData.append("name", name);
+                            formData.append("date", date);
+
                             console.log("Sending audio file to server...");
-                            fetch("/upload", {
+                            fetch("http://127.0.0.1:5000/upload", {
                                 method: "POST",
                                 body: formData
                             })
                             .then(response => {
-                                console.log("Server response received.");
+                                if (!response.ok) {
+                                    throw new Error(`Server error: ${response.status}`);
+                                }
                                 return response.json();
                             })
                             .then(data => {

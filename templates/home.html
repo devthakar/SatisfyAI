@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SatisfyAI Recorder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>SatisfyAI</h1>
+        <form>
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="hidden" id="date" name="date"> 
+            <button type="button" id="recordButton">Record</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('date').value = new Date().toISOString().slice(0, 10); 
+    </script>
+    <script src="{{ url_for('static', filename='record.js') }}"></script> 
+</body>
+</html>

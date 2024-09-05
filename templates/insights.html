@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>SatisfyAI Insights</h1>
+    </div>
+    <div class="content">
+        <div class="main-panel">
+            <div class="insights-box" id="insightsBox">
+            </div>
+            <button id="generateButton">Generate</button>
+        </div>
+        <div class="side-panel">
+            <div class="links">
+                <a href="{{ url_for('insights') }}">Insights</a>
+                <a href="#">Health Score</a>
+                <a href="{{ url_for('records') }}">Records</a>
+            </div>
+        </div>
+    </div>
+    <script>
+    function formatInsights(insights) {
+        let formatted = insights.replace(/(?:\r\n|\r|\n)/g, '<br>'); 
+        formatted = formatted.replace(/•/g, '  *'); 
+        return formatted;
+    }
+
+    document.getElementById('generateButton').addEventListener('click', function() {
+        fetch('/generate-insights')
+        .then(response => response.json())
+        .then(data => {
+            if (data.insights) {
+                const formattedInsights = formatInsights(data.insights);
+                document.getElementById('insightsBox').innerHTML = `<p>${formattedInsights}</p>`;
+            } else {
+                document.getElementById('insightsBox').innerHTML = `<p>Error generating insights: ${data.error}</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('insightsBox').innerHTML = `<p>Error generating insights: ${error}</p>`;
+        });
+    });
+    </script>
+</body>
+</html>
